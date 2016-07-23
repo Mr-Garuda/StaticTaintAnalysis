@@ -76,8 +76,9 @@ void callgraph::addCaller(FunctionDecl* otherFD){
 	callerNum++;
 }
 
-void callgraph::addCallee(FunctionDecl* otherFD){
+void callgraph::addCallee(FunctionDecl* otherFD,CallExpr* expr){
 	callee.push_back(otherFD);
+	call_map.insert(std::pair<FunctionDecl*,CallExpr*>(otherFD,expr));
 	calleeNum++;
 }
 
@@ -87,11 +88,26 @@ void callgraph::delCallee(FunctionDecl* otherFD)
 	std::vector<FunctionDecl*>::iterator it_caller;
 	std::vector<FunctionDecl*>::iterator it_callee;
 	for (it_callee = callee.begin(); it_callee != callee.end(); it_callee++)
+	{
 		if ((*it_callee) == otherFD)
 		{
 			callee.erase(it_callee);
+			break;
+		}
+	}
+	std::map<FunctionDecl*, CallExpr*>::iterator it_call_map=call_map.begin();
+	while (it_call_map != call_map.end())
+	{
+		if ((*it_call_map).first == otherFD)
+		{
+			call_map.erase(it_call_map);
 			return;
 		}
+		else
+		{
+			it_call_map++;
+		}
+	}
 }
 
 void callgraph::delCaller(FunctionDecl* otherFD)
@@ -140,8 +156,18 @@ void ringCheck(std::vector<callgraph*> cg, callgraph* t)
 				
 				t->delCallee(tempt);
 				tempc->delCaller(tempt);
-				t_table.insert(tempt->getLocation().printToString(tempc->getSourceManager()), tempt->getQualifiedNameAsString(), 6);
 				//it_callee--;//=================
+				std::map<FunctionDecl*, CallExpr*> temp_call_map= t->get_call_map();
+				CallExpr* expr = temp_call_map[tempt];
+				if (expr==NULL)
+				{
+					cout << "call_map_error!" << endl;
+					return;
+				}
+				else
+				{
+					t_table.insert( expr->getLocStart().printToString(tempc->getSourceManager()), tempt->getQualifiedNameAsString(), 6);
+				}
 				i--;
 				size--;
 			}
@@ -452,4 +478,9 @@ SourceManager& callgraph::getSourceManager()
 ASTContext* callgraph::getASTContext()
 {
 	return astcontext;
+}
+
+std::map<FunctionDecl*, CallExpr*>& callgraph::get_call_map()
+{
+	return call_map;
 }

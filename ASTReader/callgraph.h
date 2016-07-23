@@ -35,7 +35,7 @@ public:
 	int getCallerNum();
 	int getCalleeNum();
 	void addCaller(FunctionDecl* otherFD);
-	void addCallee(FunctionDecl* otherFD);
+	void addCallee(FunctionDecl* otherFD,CallExpr* expr);
 	void delCallee(FunctionDecl* otherFD);
 	void delCaller(FunctionDecl* otherFD);
 	void changeMethodType();
@@ -65,6 +65,7 @@ public:
 	void set_ASTContext(ASTContext* astcontext);
 	SourceManager& getSourceManager();
 	ASTContext* getASTContext();
+	std::map<FunctionDecl*, CallExpr*>& get_call_map();
 
 public:
 	std::map<clang::CFGBlock *, CFGInOut> block_io_map;
@@ -81,6 +82,7 @@ private:
 	std::vector<FunctionDecl*> caller;
 	FunctionDecl* cur;
 	std::vector<FunctionDecl*> callee;
+	std::map<FunctionDecl*, CallExpr*> call_map;
 	std::unique_ptr<CFG> cfg;
 	int callerNum, calleeNum;
 	vector<const VarDecl*> map_param;

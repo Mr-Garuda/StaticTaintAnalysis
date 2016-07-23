@@ -192,7 +192,7 @@ int main(int argc, char *argv[]) {
 				{
 					continue;
 				}
-				(*it_callgraph)->addCallee(callee);
+				(*it_callgraph)->addCallee(callee,*it_call_expr);
 				//std::cout << (*it_callgraph)->getCur()->getQualifiedNameAsString() << " -> " << (*it_call_expr)->getDirectCallee()->getQualifiedNameAsString() << std::endl;
 				tempCallgraph = findById(Callgraph, callee->getQualifiedNameAsString());
 				if (tempCallgraph == NULL || tempCallgraph->is_caller((*it_callgraph)->getCur()))

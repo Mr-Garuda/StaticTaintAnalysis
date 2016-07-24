@@ -19,7 +19,7 @@ Ttable::~Ttable()
 	}
 }
 
-bool Ttable::CreateXmlFile(Node*p, char*file)
+bool Ttable::CreateXmlFile(char*file)
 {
 
 	
@@ -31,6 +31,9 @@ bool Ttable::CreateXmlFile(Node*p, char*file)
 	TiXmlElement *RootElement = new TiXmlElement("Taints");
 	myDocument->LinkEndChild(RootElement);
 	//创建一个Person元素并连接。
+	Node * p = head;
+	while(p!=NULL)
+	{
 	TiXmlElement *PersonElement = new TiXmlElement("Taint");
 	RootElement->LinkEndChild(PersonElement);
 	//设置Person元素的属性。
@@ -53,8 +56,10 @@ bool Ttable::CreateXmlFile(Node*p, char*file)
 	AgeElement->LinkEndChild(AgeContent);
 	functionname->LinkEndChild(functname);
 	file_name->LinkEndChild(file_name_1);
+	p = p->next;
+	}
 	//保存到文件
-	int i;
+
 
 	myDocument->SaveFile(file);
 	return 1;
@@ -229,7 +234,7 @@ void Ttable::listout()
 		t = t->next;
 	}
 }
-bool Ttable::XMLout()
+bool Ttable::XMLout(striing file_addr)
 {
 
 	if (head == NULL)
@@ -240,10 +245,13 @@ bool Ttable::XMLout()
 	}
 	else
 	{
-		char *file = "C:/Users/dell/Desktop/111/Warning%d.XML";
+		char * file = (char*)file_addr.data();
+		//char *file = "C:/Users/dell/Desktop/111/Warning%d.XML";
 		char * f = NULL;
 		int i = 1;
 		Node*p = head;
+		CreateXmlFile(file);
+		/*
 		while (p != NULL)
 		{
 			//cout << i << endl;	
@@ -253,6 +261,7 @@ bool Ttable::XMLout()
 			i++;
 			p = p->next;
 		}
+		*/
 		return 1;
 	}
 

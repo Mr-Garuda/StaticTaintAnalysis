@@ -234,7 +234,7 @@ void Ttable::listout()
 		t = t->next;
 	}
 }
-bool Ttable::XMLout(striing file_addr)
+bool Ttable::XMLout(string file_addr)
 {
 
 	if (head == NULL)

@@ -19,6 +19,7 @@ std::vector<unique_ptr<ASTUnit>> astUnit;
 std::vector<string> files;
 Ttable t_table;
 std::vector<std::vector<XYJ_table*>*> xyj_table;
+string folder_path="NULL";
 
 void get_file(string path,std::vector<string>& all_file);
 void print_file(const std::vector<string> files);
@@ -28,6 +29,7 @@ int main(int argc, char *argv[]) {
 	//获取目录下所有.cpp、.c文件所生成的.ast文件
 	
 	get_file(argv[1], files);
+	cout << folder_path << endl;
 	//print_file(files);
 
 	int func_num = 0;
@@ -308,6 +310,7 @@ int main(int argc, char *argv[]) {
 		{
 			checkCFG(*(*it3)->get_cfg(), (*it3)->getCTmap(), *it3);
 			MsgOutput2Xml(*it3, t_table);
+			t_table.XMLout(folder_path.assign(".xml"));
 			break;
 		}
 	}
@@ -329,6 +332,10 @@ void get_file(string path, std::vector<string>& all_files)
 	//基础空串
 	string p;	
 	hFile = _findfirst(p.assign(path).append("\\*").c_str(), &fileinfo);
+	if (folder_path.compare(string("NULL")) == 0)
+	{
+		folder_path = p.assign(path);
+	}
 	if (hFile == -1)
 	{
 		cout << "文件夹不存在" << endl;
@@ -347,6 +354,7 @@ void get_file(string path, std::vector<string>& all_files)
 			else if (regex_match(fileinfo.name, regex("(.*)(.ast)")) )
 			{
 				all_files.push_back(p.assign(path).append("\\").append(fileinfo.name));
+				cout << p << endl;
 			}
 			else
 			{

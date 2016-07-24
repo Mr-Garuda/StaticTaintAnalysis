@@ -48,10 +48,10 @@ public:
 	//	bool insert(const VarDecl *p,string line,string function,int TYPE);
 	void insert(string line, string function, int TYPE);
 	void outTtable();
-	bool CreateXmlFile(Node*p, char*file);
+	bool CreateXmlFile(char*file);
 	VarDecl * serach(const VarDecl * p);
 	void listout();
-	bool XMLout();
+	bool XMLout(string file_addr);
 	Node * head = NULL;
 private:
 
